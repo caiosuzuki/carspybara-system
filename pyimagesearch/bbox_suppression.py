@@ -1,10 +1,13 @@
 # import the necessary packages
 import numpy as np
+from typing import List
+
+from utils import Prediction
 
 # Malisiewicz et al.
-def non_max_suppression_fast(boxes, overlapThresh=0.35):
+def non_max_suppression_fast(predictions: List[Prediction], overlapThresh=0.35):
     # if there are no boxes, return an empty list
-    if len(boxes) == 0:
+    if len(predictions) == 0:
         return []
 
 
@@ -18,12 +21,12 @@ def non_max_suppression_fast(boxes, overlapThresh=0.35):
 
     confidence = []
 
-    for box in boxes:
-        x1.append(box["topleft"]['x'])
-        y1.append(box["topleft"]['y'])
-        x2.append(box["bottomright"]['x'])
-        y2.append(box["bottomright"]['y'])
-        confidence.append(box["confidence"])
+    for p in predictions:
+        x1.append(p.bbox.top_left.x)
+        y1.append(p.bbox.top_left.y)
+        x2.append(p.bbox.bottom_right.x)
+        y2.append(p.bbox.bottom_right.x)
+        confidence.append(p.confidence)
 
 
     # grab the coordinates of the bounding boxes
@@ -67,4 +70,4 @@ def non_max_suppression_fast(boxes, overlapThresh=0.35):
 
     # return only the bounding boxes that were picked using the
     # integer data type
-    return [boxes[i] for i in pick]
+    return pick
