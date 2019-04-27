@@ -36,9 +36,10 @@ def draw_bboxes(frame, predictions: List[Prediction], colors: dict) -> None:
         cv2.rectangle(frame, (tl.x, tl.y), (br.x, br.y), color, 2)
         print_text_image(str(confidence)[:4], frame, (tl.x, tl.y+10), 0.3, color, 1)
 
-def draw_centroid(frame: np.ndarray, objs):
-    for (objectID, centroid) in objs.items():
-        cv2.circle(frame, (centroid[0], centroid[1]), 2, (0,0,255), -1)
+def draw_centroid(frame: np.ndarray, objs) -> None:
+    for bbox in objs.values():
+        centroid = (bbox.top_left + bbox.bottom_right) / 2
+        cv2.circle(frame, (int(centroid[0]), int(centroid[1])), 2, (0,0,255), -1)
 
 def draw_lines(img, lines):
     for line in lines:
