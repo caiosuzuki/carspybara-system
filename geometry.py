@@ -136,6 +136,6 @@ class BoundingBox:
 
     def __abs__(self) -> float:
         diff = self.bottom_right - self.top_left
-        diff.x = max(diff.x, 0)
-        diff.y = max(diff.y, 0)
+        if diff.x < 0 or diff.y < 0:
+            return abs(Vec2())
         return float(abs(diff))

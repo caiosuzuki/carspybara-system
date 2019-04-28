@@ -22,7 +22,7 @@ class BoundingBoxTracker():
 	def register(self, bbox: BoundingBox) -> None:
 		# when registering an object we use the next available object
 		# ID to store the centroid
-		self.objects[self.nextObjectID] = BoundingBox
+		self.objects[self.nextObjectID] = bbox
 		self.disappeared[self.nextObjectID] = 0
 		self.nextObjectID += 1
 
@@ -43,7 +43,7 @@ class BoundingBoxTracker():
 		
 		return matrix
 
-	def update(self, rects: BoundingBox) -> OrderedDict:
+	def update(self, rects: List[BoundingBox]) -> OrderedDict:
 		# check to see if the list of input bounding box rectangles
 		# is empty
 		if len(rects) == 0:

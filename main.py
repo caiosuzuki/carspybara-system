@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 from geometry import Vec2, BoundingBox
-from darkflow.darkflow.net.build import TFNet
+from thtrieu_darkflow.darkflow.net.build import TFNet
 import numpy as np
 import cv2
 import sys
@@ -32,7 +32,7 @@ def draw_bboxes(frame, predictions: List[Prediction], colors: dict) -> None:
         confidence  = p.confidence
         tl = p.bbox.top_left
         br = p.bbox.bottom_right
-        color = colors[p.bbox.label]
+        color = colors[p.label]
         cv2.rectangle(frame, (tl.x, tl.y), (br.x, br.y), color, 2)
         print_text_image(str(confidence)[:4], frame, (tl.x, tl.y+10), 0.3, color, 1)
 
@@ -89,7 +89,7 @@ def load_lines(file_name: str) -> List:
         lines = json.loads(lines_file.read())['lines']
     return lines
 
-def get_lines_bboxes(lines: List[List[int, int]]) -> List[BoundingBox]:
+def get_lines_bboxes(lines: List[List[int]]) -> List[BoundingBox]:
     lines_bbxs = []
 
     for line in lines:
@@ -139,11 +139,10 @@ def compute_video(cap, lines: List,
 
         filter_pred = filter_predictions(predictions, lines_bbxs)
         total = 0
+
         for i, pred_set in enumerate(filter_pred):
-
-            indexes = non_max_suppression_fast(pred_set[i])
+            indexes = non_max_suppression_fast(pred_set)
             final_pred = [pred_set[k] for k in indexes]
-
             objs = trackers[i].update([p.bbox for p in final_pred])
             total += trackers[i].nextObjectID
 
