@@ -106,7 +106,7 @@ class BoundingBoxTracker():
 				# if we have already examined either the row or
 				# column value before, ignore it
 				# val
-				if row in usedRows or col in usedCols:
+				if row in usedRows or col in usedCols or D[row,col] > 0.5:
 					continue
 
 				# otherwise, grab the object ID for the current row,
